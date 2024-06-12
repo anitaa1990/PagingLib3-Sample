@@ -28,8 +28,10 @@ android {
         val properties = Properties()
         properties.load(keystoreFile.inputStream())
 
-        //return empty key in case something goes wrong
-        resValue("string", "api_key", properties.getProperty("API_KEY") ?: "")
+        buildConfigField("String", "api_key", properties.getProperty("API_KEY") ?: "")
+    }
+    buildFeatures {
+        buildConfig = true
     }
 
     buildTypes {
