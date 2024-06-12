@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">PagingLib3-Sample</string>
+    <string name="item_date" formatted="false">%s at %s</string>
+    <string name="item_title" formatted="false">&#160;posted&#160;</string>
+    <string name="author_name" formatted="false">Anonymous</string>
+    <string name="item_likes" formatted="false">%s likes</string>
+    <string name="item_comments" formatted="false">%s comments</string>
+    <string name="item_shares" formatted="false">%s shares</string>
 </resources>
