@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.sp
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.AsyncImage
 import com.an.paginglib3_sample.R
 import com.an.paginglib3_sample.ext.getDate
 import com.an.paginglib3_sample.ext.getTime
@@ -120,8 +121,7 @@ fun NewsItem(article: Article) {
             containerColor = MaterialTheme.colorScheme.onPrimary
         )
     ) {
-        Column (modifier = Modifier
-            .fillMaxWidth()) {
+        Column (modifier = Modifier.fillMaxWidth()) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -177,9 +177,10 @@ fun NewsItem(article: Article) {
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSecondaryContainer,
             )
-            Image(
-                painter = painterResource(id = R.drawable.ic_dummy),
-                contentDescription = ""
+            AsyncImage(
+                model = article.urlToImage,
+                contentDescription = "",
+                modifier = Modifier.fillMaxWidth()
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
