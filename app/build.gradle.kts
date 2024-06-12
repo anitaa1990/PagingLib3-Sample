@@ -87,6 +87,7 @@ dependencies {
 
     // paging
     implementation(libs.paging)
+    implementation(libs.paging.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
