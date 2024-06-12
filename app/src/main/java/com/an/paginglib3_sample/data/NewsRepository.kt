@@ -2,7 +2,7 @@ package com.an.paginglib3_sample.data
 
 import com.an.paginglib3_sample.BuildConfig
 import com.an.paginglib3_sample.api.NewsApiService
-import com.an.paginglib3_sample.model.Article
+import com.an.paginglib3_sample.model.NewsApiResponse
 import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
@@ -11,10 +11,10 @@ class NewsRepository @Inject constructor(
     suspend fun fetchNews(
         query: String,
         nextPage: Long
-    ): List<Article>? = apiService.fetchFeed(
+    ): NewsApiResponse? = apiService.fetchFeed(
         q = query,
         apiKey = BuildConfig.api_key,
         pageSize = 20,
         page = nextPage
-    ).body()?.articles
+    ).body()
 }
