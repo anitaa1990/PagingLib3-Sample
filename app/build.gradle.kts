@@ -77,6 +77,8 @@ dependencies {
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.retrofit.gson.converter)
+    implementation(libs.okhttp)
+    implementation(libs.okhttp.logging.interceptor)
 
     // Hilt
     implementation(libs.hilt.android)
