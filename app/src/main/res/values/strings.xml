@@ -6,4 +6,6 @@
     <string name="item_likes" formatted="false">%s likes</string>
     <string name="item_comments" formatted="false">%s comments</string>
     <string name="item_shares" formatted="false">%s shares</string>
+    <string name="connection_unavailable">No connection</string>
+    <string name="connection_available">Back online</string>
 </resources>

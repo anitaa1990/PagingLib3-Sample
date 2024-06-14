@@ -14,9 +14,13 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.an.paginglib3_sample.R
+import com.an.paginglib3_sample.ui.component.OfflineStatusBar
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
@@ -26,16 +30,25 @@ fun HomeScreen(
 ) {
     PagingLib3SampleTheme {
         val query = "movies"
-        val news = viewModel.getNews(query)
 
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             topBar = { MainTopAppBar() }
         ) { innerPadding ->
-            NewsList(
-                modifier = Modifier.padding(innerPadding),
-                newsList = news
+            val connectionState by viewModel.state.collectAsStateWithLifecycle(
+                lifecycleOwner = LocalLifecycleOwner.current
             )
+            val modifier = Modifier.padding(innerPadding)
+            OfflineStatusBar(modifier, connectionState)
+            when {
+                connectionState -> {
+                    val news = viewModel.getNews(query)
+                    NewsList(
+                        modifier = modifier,
+                        newsList = news
+                    )
+                }
+            }
         }
     }
 }
