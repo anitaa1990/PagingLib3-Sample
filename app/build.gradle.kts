@@ -94,6 +94,9 @@ dependencies {
     // Coil
     implementation(libs.coil)
 
+    // Android Compose Lifecycle
+    implementation(libs.androidx.lifecycle.runtime.compose.android)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
