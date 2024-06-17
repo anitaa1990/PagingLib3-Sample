@@ -11,10 +11,18 @@ class NewsRepository @Inject constructor(
     suspend fun fetchNews(
         query: String,
         nextPage: Long
-    ): NewsApiResponse? = apiService.fetchFeed(
-        q = query,
-        apiKey = BuildConfig.api_key,
-        pageSize = 20,
-        page = nextPage
-    ).body()
+    ): NewsApiResponse? {
+        return try {
+            val response = apiService.fetchFeed(
+                q = query,
+                apiKey = BuildConfig.api_key,
+                pageSize = 20,
+                page = nextPage
+            )
+            response.body()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 }

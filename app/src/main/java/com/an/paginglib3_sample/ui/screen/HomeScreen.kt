@@ -39,16 +39,16 @@ fun HomeScreen(
                 lifecycleOwner = LocalLifecycleOwner.current
             )
             val modifier = Modifier.padding(innerPadding)
+
+            // Update the news list
+            val news = viewModel.getNews(query)
+            NewsList(
+                modifier = modifier,
+                newsList = news
+            )
+
+            // offline status bar displayed when there is no internet
             OfflineStatusBar(modifier, connectionState)
-            when {
-                connectionState -> {
-                    val news = viewModel.getNews(query)
-                    NewsList(
-                        modifier = modifier,
-                        newsList = news
-                    )
-                }
-            }
         }
     }
 }
