@@ -33,10 +33,16 @@ class NewsViewModel @Inject constructor(
     fun getNews(query: String): Flow<PagingData<Article>> {
         return Pager(
             // Configure how data is loaded by passing additional properties to
-            // PagingConfig, such as prefetchDistance.
-            PagingConfig(pageSize = 20)
+            // PagingConfig, such as `prefetchDistance` or `pageSize`.
+            PagingConfig(
+                // defines the number of items loaded at once from the PagingSource
+                pageSize = 2
+            )
         ) { NewsDataSource(repository, query) }
+            // converts the data into a Flow (or LiveData)
             .flow
+            // ensures that upon configuration change, the new Activity will receive the
+            // existing data immediately rather than fetching it from scratch
             .cachedIn(viewModelScope)
     }
 }

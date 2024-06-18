@@ -9,6 +9,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
@@ -21,6 +22,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.an.paginglib3_sample.R
 import com.an.paginglib3_sample.ui.component.OfflineStatusBar
+import com.an.paginglib3_sample.ui.component.SnackBarAppState
+import com.an.paginglib3_sample.ui.component.rememberSnackBarAppState
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
@@ -30,8 +33,10 @@ fun HomeScreen(
 ) {
     PagingLib3SampleTheme {
         val query = "movies"
+        val appState: SnackBarAppState = rememberSnackBarAppState()
 
         Scaffold(
+            snackbarHost = { SnackbarHost(hostState = appState.snackBarHostState) },
             modifier = Modifier.fillMaxSize(),
             topBar = { MainTopAppBar() }
         ) { innerPadding ->
@@ -44,7 +49,8 @@ fun HomeScreen(
             val news = viewModel.getNews(query)
             NewsList(
                 modifier = modifier,
-                newsList = news
+                newsList = news,
+                snackBarAppState = appState
             )
 
             // offline status bar displayed when there is no internet

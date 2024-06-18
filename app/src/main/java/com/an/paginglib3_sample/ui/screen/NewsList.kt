@@ -49,12 +49,14 @@ import com.an.paginglib3_sample.ext.getDate
 import com.an.paginglib3_sample.ext.getTime
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.Source
+import com.an.paginglib3_sample.ui.component.SnackBarAppState
 import kotlinx.coroutines.flow.Flow
 
 @Composable
 fun NewsList(
     modifier: Modifier = Modifier,
-    newsList: Flow<PagingData<Article>>
+    newsList: Flow<PagingData<Article>>,
+    snackBarAppState: SnackBarAppState
 ) {
     val lazyNewsItems = newsList.collectAsLazyPagingItems()
     LazyColumn(
@@ -67,20 +69,19 @@ fun NewsList(
         }
 
         lazyNewsItems.apply {
-            // TODO: add error states for paging list
             when {
-                loadState.refresh is
-                        LoadState.Loading -> {
+                loadState.refresh is LoadState.Loading -> {
                     item { LoadingItem() }
                 }
-                loadState.append is
-                        LoadState.Loading -> {
+                loadState.append is LoadState.Loading -> {
                     item { LoadingItem() }
                 }
-                loadState.refresh is
-                        LoadState.Error -> { }
-                loadState.append is
-                        LoadState.Error -> { }
+                loadState.refresh is LoadState.Error -> {
+                    item { snackBarAppState.showSnackBar("Error fetching data") }
+                }
+                loadState.append is LoadState.Error -> {
+                    item { snackBarAppState.showSnackBar("Error fetching data") }
+                }
             }
         }
     }
