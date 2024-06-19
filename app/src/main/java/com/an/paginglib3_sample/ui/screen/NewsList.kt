@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -40,8 +39,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.paging.LoadState
-import androidx.paging.PagingData
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.an.paginglib3_sample.R
@@ -49,42 +47,29 @@ import com.an.paginglib3_sample.ext.getDate
 import com.an.paginglib3_sample.ext.getTime
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.Source
+import com.an.paginglib3_sample.ui.component.PullToRefreshLazyColumn
 import com.an.paginglib3_sample.ui.component.SnackBarAppState
-import kotlinx.coroutines.flow.Flow
+import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
 @Composable
 fun NewsList(
     modifier: Modifier = Modifier,
-    newsList: Flow<PagingData<Article>>,
+    viewModel: NewsViewModel,
     snackBarAppState: SnackBarAppState
 ) {
-    val lazyNewsItems = newsList.collectAsLazyPagingItems()
-    LazyColumn(
+    val lazyNewsItems = viewModel.getNews("movies").collectAsLazyPagingItems()
+    val isRefreshing = viewModel.isRefreshing.collectAsStateWithLifecycle()
+
+    PullToRefreshLazyColumn(
+        items = lazyNewsItems,
+        content = { NewsItem(it) },
+        isRefreshing = isRefreshing,
+        onRefresh = { viewModel.refresh(lazyNewsItems) },
+        onError = { snackBarAppState.showSnackBar("Error fetching data") },
         modifier = modifier
             .fillMaxSize()
             .wrapContentHeight()
-    ) {
-        items(lazyNewsItems.itemCount) { index ->
-            lazyNewsItems[index]?.let { NewsItem(it) }
-        }
-
-        lazyNewsItems.apply {
-            when {
-                loadState.refresh is LoadState.Loading -> {
-                    item { LoadingItem() }
-                }
-                loadState.append is LoadState.Loading -> {
-                    item { LoadingItem() }
-                }
-                loadState.refresh is LoadState.Error -> {
-                    item { snackBarAppState.showSnackBar("Error fetching data") }
-                }
-                loadState.append is LoadState.Error -> {
-                    item { snackBarAppState.showSnackBar("Error fetching data") }
-                }
-            }
-        }
-    }
+    )
 }
 
 @Composable

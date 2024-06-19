@@ -15,13 +15,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.an.paginglib3_sample.R
-import com.an.paginglib3_sample.ui.component.OfflineStatusBar
 import com.an.paginglib3_sample.ui.component.SnackBarAppState
 import com.an.paginglib3_sample.ui.component.rememberSnackBarAppState
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
@@ -32,7 +28,6 @@ fun HomeScreen(
     viewModel: NewsViewModel
 ) {
     PagingLib3SampleTheme {
-        val query = "movies"
         val appState: SnackBarAppState = rememberSnackBarAppState()
 
         Scaffold(
@@ -40,21 +35,13 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             topBar = { MainTopAppBar() }
         ) { innerPadding ->
-            val connectionState by viewModel.state.collectAsStateWithLifecycle(
-                lifecycleOwner = LocalLifecycleOwner.current
-            )
-            val modifier = Modifier.padding(innerPadding)
 
             // Update the news list
-            val news = viewModel.getNews(query)
             NewsList(
-                modifier = modifier,
-                newsList = news,
+                modifier = Modifier.padding(innerPadding),
+                viewModel = viewModel,
                 snackBarAppState = appState
             )
-
-            // offline status bar displayed when there is no internet
-            OfflineStatusBar(modifier, connectionState)
         }
     }
 }

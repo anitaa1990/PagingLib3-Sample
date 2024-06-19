@@ -6,16 +6,21 @@ import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import androidx.paging.compose.LazyPagingItems
 import com.an.paginglib3_sample.data.NewsDataSource
 import com.an.paginglib3_sample.data.NewsRepository
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.utils.NetworkStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,8 +35,13 @@ class NewsViewModel @Inject constructor(
         started = WhileSubscribed(5000)
     )
 
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
     fun getNews(query: String): Flow<PagingData<Article>> {
-        return Pager(
+        updateRefresh(true)
+
+        val articles = Pager(
             // Configure how data is loaded by passing additional properties to
             // PagingConfig, such as `prefetchDistance` or `pageSize`.
             PagingConfig(
@@ -44,5 +54,23 @@ class NewsViewModel @Inject constructor(
             // ensures that upon configuration change, the new Activity will receive the
             // existing data immediately rather than fetching it from scratch
             .cachedIn(viewModelScope)
+
+        updateRefresh(false)
+        return articles
+    }
+
+    fun refresh(items: LazyPagingItems<Article>) {
+        updateRefresh(true)
+        items.refresh()
+        updateRefresh(false)
+    }
+
+    private fun updateRefresh(value: Boolean) {
+        viewModelScope.launch {
+            if (!value) {
+                delay(1000)
+            }
+            _isRefreshing.value = value
+        }
     }
 }
