@@ -37,18 +37,11 @@ fun HomeScreen(
                 MainTopAppBar(
                     searchWidgetState = searchWidgetState,
                     searchTextState = searchTextState,
-                    onTextChange = {
-                        viewModel.updateSearchTextState(newValue = it)
-                    },
-                    onCloseClicked = {
-                        viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                    },
-                    onSearchClicked = {
-                        viewModel.refresh(items)
-                        viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
-                    },
+                    onTextChange = { viewModel.updateSearchTextState(it) },
+                    onCloseClicked = { viewModel.onSearchClosed(items) },
+                    onSearchClicked = { viewModel.refresh(items) },
                     onSearchTriggered = {
-                        viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
+                        viewModel.updateSearchWidgetState(SearchWidgetState.OPENED)
                     }
                 )
             }

@@ -32,6 +32,8 @@ class NewsViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
+    private val _updateUi = MutableStateFlow(false)
+
     private val _searchWidgetState: MutableState<SearchWidgetState> =
         mutableStateOf(value = SearchWidgetState.CLOSED)
     val searchWidgetState: State<SearchWidgetState> = _searchWidgetState
@@ -45,6 +47,12 @@ class NewsViewModel @Inject constructor(
 
     fun updateSearchTextState(newValue: String) {
         _searchTextState.value = newValue
+        _updateUi.value = newValue.isEmpty()
+    }
+
+    fun onSearchClosed(items: LazyPagingItems<Article>) {
+        updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
+        if (_updateUi.value) refresh(items)
     }
 
     fun getNews(): Flow<PagingData<Article>> {
