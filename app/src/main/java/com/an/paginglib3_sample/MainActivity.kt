@@ -17,7 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: NewsViewModel = hiltViewModel()
-            val lazyNewsItems = viewModel.getNews("movies").collectAsLazyPagingItems()
+            val lazyNewsItems = viewModel.getNews().collectAsLazyPagingItems()
 
             HomeScreen(
                 viewModel = viewModel,

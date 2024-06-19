@@ -43,7 +43,10 @@ fun HomeScreen(
                     onCloseClicked = {
                         viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
                     },
-                    onSearchClicked = { },
+                    onSearchClicked = {
+                        viewModel.refresh(items)
+                        viewModel.updateSearchWidgetState(newValue = SearchWidgetState.CLOSED)
+                    },
                     onSearchTriggered = {
                         viewModel.updateSearchWidgetState(newValue = SearchWidgetState.OPENED)
                     }

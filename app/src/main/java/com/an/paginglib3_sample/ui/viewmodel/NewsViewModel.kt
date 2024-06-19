@@ -47,7 +47,7 @@ class NewsViewModel @Inject constructor(
         _searchTextState.value = newValue
     }
 
-    fun getNews(query: String): Flow<PagingData<Article>> {
+    fun getNews(): Flow<PagingData<Article>> {
         updateRefresh(true)
 
         val articles = Pager(
@@ -57,7 +57,10 @@ class NewsViewModel @Inject constructor(
                 // defines the number of items loaded at once from the PagingSource
                 pageSize = 2
             )
-        ) { NewsDataSource(repository, query) }
+        ) {
+            val query = _searchTextState.value.ifEmpty { "movies" }
+            NewsDataSource(repository, query)
+        }
             // converts the data into a Flow (or LiveData)
             .flow
             // ensures that upon configuration change, the new Activity will receive the
