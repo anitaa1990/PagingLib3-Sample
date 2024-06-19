@@ -48,7 +48,7 @@ fun SearchAppBar(
                 )
             },
             textStyle = TextStyle(
-                fontSize = MaterialTheme.typography.displayMedium.fontSize
+                fontSize = MaterialTheme.typography.bodyMedium.fontSize
             ),
             singleLine = true,
             leadingIcon = {
