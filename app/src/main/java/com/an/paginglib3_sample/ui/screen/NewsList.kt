@@ -23,12 +23,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.SpanStyle
@@ -40,8 +40,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.compose.collectAsLazyPagingItems
+import androidx.paging.compose.LazyPagingItems
 import coil.compose.AsyncImage
 import com.an.paginglib3_sample.R
 import com.an.paginglib3_sample.ext.getDate
@@ -50,24 +49,20 @@ import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.Source
 import com.an.paginglib3_sample.ui.component.PullToRefreshLazyColumn
 import com.an.paginglib3_sample.ui.component.SnackBarAppState
-import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
 @Composable
 fun NewsList(
     modifier: Modifier = Modifier,
-    viewModel: NewsViewModel,
+    items: LazyPagingItems<Article>,
+    isRefreshing: State<Boolean>,
+    onRefresh: () -> Unit,
     snackBarAppState: SnackBarAppState
 ) {
-    val lazyNewsItems = viewModel.getNews("movies").collectAsLazyPagingItems()
-    val isRefreshing = viewModel.isRefreshing.collectAsStateWithLifecycle(
-        lifecycleOwner = LocalLifecycleOwner.current
-    )
-
     PullToRefreshLazyColumn(
-        items = lazyNewsItems,
+        items = items,
         content = { NewsItem(it) },
         isRefreshing = isRefreshing,
-        onRefresh = { viewModel.refresh(lazyNewsItems) },
+        onRefresh = onRefresh,
         onError = { snackBarAppState.showSnackBar("Error fetching data") },
         modifier = modifier
             .fillMaxSize()

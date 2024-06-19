@@ -1,5 +1,8 @@
 package com.an.paginglib3_sample.ui.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -10,16 +13,14 @@ import androidx.paging.compose.LazyPagingItems
 import com.an.paginglib3_sample.data.NewsDataSource
 import com.an.paginglib3_sample.data.NewsRepository
 import com.an.paginglib3_sample.model.Article
+import com.an.paginglib3_sample.ui.component.search.SearchWidgetState
 import com.an.paginglib3_sample.utils.NetworkStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,15 +29,23 @@ class NewsViewModel @Inject constructor(
     private val repository: NewsRepository,
     networkStatus: NetworkStatus
 ) : ViewModel() {
-    private val _state = networkStatus.isConnected.distinctUntilChanged()
-    val state: StateFlow<Boolean> = _state.stateIn(
-        initialValue = networkStatus.isConnected(),
-        scope = viewModelScope,
-        started = WhileSubscribed(5000)
-    )
-
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
+
+    private val _searchWidgetState: MutableState<SearchWidgetState> =
+        mutableStateOf(value = SearchWidgetState.CLOSED)
+    val searchWidgetState: State<SearchWidgetState> = _searchWidgetState
+
+    private val _searchTextState: MutableState<String> = mutableStateOf(value = "")
+    val searchTextState: State<String> = _searchTextState
+
+    fun updateSearchWidgetState(newValue: SearchWidgetState) {
+        _searchWidgetState.value = newValue
+    }
+
+    fun updateSearchTextState(newValue: String) {
+        _searchTextState.value = newValue
+    }
 
     fun getNews(query: String): Flow<PagingData<Article>> {
         updateRefresh(true)

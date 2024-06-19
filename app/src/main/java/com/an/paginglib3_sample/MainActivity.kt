@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.screen.HomeScreen
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -16,7 +17,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val viewModel: NewsViewModel = hiltViewModel()
-            HomeScreen(viewModel)
+            val lazyNewsItems = viewModel.getNews("movies").collectAsLazyPagingItems()
+
+            HomeScreen(
+                viewModel = viewModel,
+                items = lazyNewsItems
+            )
         }
     }
 }
