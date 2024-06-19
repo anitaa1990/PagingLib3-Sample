@@ -32,12 +32,12 @@ fun SearchAppBar(
     onSearchClicked: (String) -> Unit,
 ) {
     Surface(
-        modifier = Modifier.fillMaxWidth().height(84.dp),
+        modifier = Modifier.fillMaxWidth().height(115.dp),
         shadowElevation = 10.dp,
         color = MaterialTheme.colorScheme.primaryContainer
     ) {
         TextField(
-            modifier = Modifier.fillMaxWidth().padding(top = 30.dp),
+            modifier = Modifier.fillMaxWidth().padding(top = 50.dp),
             value = text,
             onValueChange = { onTextChange(it) },
             placeholder = {
