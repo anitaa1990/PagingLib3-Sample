@@ -67,9 +67,8 @@ class NewsViewModel @Inject constructor(
 
     private fun updateRefresh(value: Boolean) {
         viewModelScope.launch {
-            if (!value) {
-                delay(1000)
-            }
+            // Workaround to delay refresh by 1s in order for PullToRefresh to work correctly
+            if (!value) { delay(1000) }
             _isRefreshing.value = value
         }
     }
