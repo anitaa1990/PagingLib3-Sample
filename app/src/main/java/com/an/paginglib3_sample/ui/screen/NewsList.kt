@@ -10,14 +10,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -49,6 +47,7 @@ import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.Source
 import com.an.paginglib3_sample.ui.component.PullToRefreshLazyColumn
 import com.an.paginglib3_sample.ui.component.SnackBarAppState
+import com.an.paginglib3_sample.utils.isEmpty
 
 @Composable
 fun NewsList(
@@ -58,39 +57,45 @@ fun NewsList(
     onRefresh: () -> Unit,
     snackBarAppState: SnackBarAppState
 ) {
-    PullToRefreshLazyColumn(
-        items = items,
-        content = { NewsItem(it) },
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
-        onError = { snackBarAppState.showSnackBar("Error fetching data") },
-        modifier = modifier
-            .fillMaxSize()
-            .wrapContentHeight()
-    )
+    if(items.isEmpty()) {
+        EmptyScreen()
+    } else {
+        PullToRefreshLazyColumn(
+            items = items,
+            content = { NewsItem(it) },
+            isRefreshing = isRefreshing,
+            onRefresh = onRefresh,
+            onError = { snackBarAppState.showSnackBar("Error fetching data") },
+            modifier = modifier
+                .fillMaxSize()
+                .wrapContentHeight()
+        )
+    }
 }
 
 @Composable
-fun LoadingItem() {
+fun EmptyScreen() {
     Column(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp)
-            .wrapContentWidth(
-                Alignment.CenterHorizontally
-            )
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        CircularProgressIndicator(
-            trackColor = MaterialTheme.colorScheme.primary,
-            color = MaterialTheme.colorScheme.secondaryContainer //progress color
+        Text(
+            text = "No results found!",
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Center,
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+            color = MaterialTheme.colorScheme.primary
         )
     }
 }
 
 @Preview
 @Composable
-fun LoadingItemPreview() {
-    LoadingItem()
+fun EmptyScreenPreview() {
+    EmptyScreen()
 }
 
 @Composable
