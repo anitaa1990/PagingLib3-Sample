@@ -97,6 +97,11 @@ dependencies {
     // Android Compose Lifecycle
     implementation(libs.androidx.lifecycle.runtime.compose.android)
 
+    // Mockito
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.coroutine.test)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
