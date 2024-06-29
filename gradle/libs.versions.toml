@@ -21,6 +21,7 @@ mockitoVersion = "5.7.0"
 mockitoKotlin = "5.2.1"
 coroutineTestVersion = "1.9.0-RC"
 mockServerVersion = "4.9.1"
+turbineVersion = "1.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -66,6 +67,9 @@ androidx-lifecycle-runtime-compose-android = { group = "androidx.lifecycle", nam
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockitoVersion" }
 mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", version.ref = "mockitoKotlin" }
 coroutine-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutineTestVersion" }
+
+## Turbine
+turbine = { group = "app.cash.turbine", name = "turbine", version.ref = "turbineVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

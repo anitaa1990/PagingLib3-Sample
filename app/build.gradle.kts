@@ -105,6 +105,9 @@ dependencies {
     // Retrofit testing
     testImplementation(libs.retrofit.mock)
 
+    // Turbine
+    testImplementation(libs.turbine)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
