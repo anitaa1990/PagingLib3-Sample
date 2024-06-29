@@ -102,6 +102,9 @@ dependencies {
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutine.test)
 
+    // Retrofit testing
+    testImplementation(libs.retrofit.mock)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
