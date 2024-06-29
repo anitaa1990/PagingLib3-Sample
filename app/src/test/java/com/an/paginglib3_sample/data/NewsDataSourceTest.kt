@@ -2,6 +2,8 @@ package com.an.paginglib3_sample.data
 
 import androidx.paging.PagingSource
 import com.an.paginglib3_sample.BaseUnitTest
+import com.an.paginglib3_sample.BuildConfig
+import com.an.paginglib3_sample.api.NewsApiService
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.NewsApiResponse
 import com.an.paginglib3_sample.model.Source
@@ -10,14 +12,15 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
+import retrofit2.Response
 
 class NewsDataSourceTest: BaseUnitTest() {
-    private val repository: NewsRepository = mock()
+    private val apiService: NewsApiService = mock()
     private val query = "movies"
     private val pageSize = 20
     private val firstPage = 1L
 
-    private val dataSource = NewsDataSource(repository, query)
+    private val dataSource = NewsDataSource(apiService, query)
 
     private val expectedArticles = listOf(
         Article(
@@ -37,9 +40,7 @@ class NewsDataSourceTest: BaseUnitTest() {
     @Test
     fun `when api returns first page of news then paging source returns success load result`() = runTest {
         // given that repository returns the first page of the news
-        `when`(repository.fetchNews(query, firstPage)).thenReturn(
-            NewsApiResponse(status = "ok", totalResults = 3, articles = expectedArticles)
-        )
+        setupMockResponse(firstPage)
 
         val params = PagingSource
             .LoadParams
@@ -91,9 +92,7 @@ class NewsDataSourceTest: BaseUnitTest() {
     fun `when second page of news is available then paging source returns success append load result`() = runTest {
         // given
         val secondPage = firstPage + 1
-        `when`(repository.fetchNews(query, secondPage)).thenReturn(
-            NewsApiResponse(status = "ok", totalResults = 3, articles = expectedArticles)
-        )
+        setupMockResponse(secondPage)
 
         val params = PagingSource
             .LoadParams
@@ -116,5 +115,19 @@ class NewsDataSourceTest: BaseUnitTest() {
 
         // then
         assertEquals(expected, actual)
+    }
+
+    private suspend fun setupMockResponse(page: Long) {
+        `when`(
+            apiService.fetchFeed(query, BuildConfig.api_key, page, 20)
+        ).thenReturn(
+            Response.success(
+                NewsApiResponse(
+                    status = "ok",
+                    totalResults = 3,
+                    articles = expectedArticles
+                )
+            )
+        )
     }
 }
