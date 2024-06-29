@@ -1,28 +1,28 @@
 package com.an.paginglib3_sample.data
 
-import com.an.paginglib3_sample.BuildConfig
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
 import com.an.paginglib3_sample.api.NewsApiService
-import com.an.paginglib3_sample.model.NewsApiResponse
 import javax.inject.Inject
 
 class NewsRepository @Inject constructor(
     private val apiService: NewsApiService
 ) {
-    suspend fun fetchNews(
-        query: String,
-        nextPage: Long
-    ): NewsApiResponse? {
-        return try {
-            val response = apiService.fetchFeed(
-                q = query,
-                apiKey = BuildConfig.api_key,
-                pageSize = 20,
-                page = nextPage
-            )
-            response.body()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            null
-        }
+    companion object {
+        const val PAGE_SIZE = 20
     }
+
+    fun getNews(query: String) = Pager(
+        // Configure how data is loaded by passing additional properties to
+        // PagingConfig, such as `prefetchDistance` or `pageSize`.
+        PagingConfig(
+            // defines the number of items loaded at once from the PagingSource
+            pageSize = 2
+        ),
+        pagingSourceFactory = {
+            NewsDataSource(apiService, query)
+        }
+    )
+        // converts the data into a Flow (or LiveData)
+        .flow
 }

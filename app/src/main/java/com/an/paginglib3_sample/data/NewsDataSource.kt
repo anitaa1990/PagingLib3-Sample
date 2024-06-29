@@ -1,6 +1,5 @@
 package com.an.paginglib3_sample.data
 
-import android.nfc.tech.MifareUltralight.PAGE_SIZE
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
 import com.an.paginglib3_sample.BuildConfig
@@ -51,7 +50,7 @@ class NewsDataSource @Inject constructor (
             val response = apiService.fetchFeed(
                 q = query,
                 apiKey = BuildConfig.api_key,
-                pageSize = PAGE_SIZE,
+                pageSize = NewsRepository.PAGE_SIZE,
                 page = nextPage
             )
             response.body()

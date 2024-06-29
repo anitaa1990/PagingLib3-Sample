@@ -5,12 +5,9 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import androidx.paging.compose.LazyPagingItems
-import com.an.paginglib3_sample.data.NewsDataSource
 import com.an.paginglib3_sample.data.NewsRepository
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.ui.component.search.SearchWidgetState
@@ -56,22 +53,8 @@ class NewsViewModel @Inject constructor(
     fun getNews(): Flow<PagingData<Article>> {
         updateRefresh(true)
 
-        val articles = Pager(
-            // Configure how data is loaded by passing additional properties to
-            // PagingConfig, such as `prefetchDistance` or `pageSize`.
-            PagingConfig(
-                // defines the number of items loaded at once from the PagingSource
-                pageSize = 2
-            )
-        ) {
-            val query = _searchTextState.value.ifEmpty { "movies" }
-            NewsDataSource(repository, query)
-        }
-            // converts the data into a Flow (or LiveData)
-            .flow
-            // ensures that upon configuration change, the new Activity will receive the
-            // existing data immediately rather than fetching it from scratch
-            .cachedIn(viewModelScope)
+        val query = _searchTextState.value.ifEmpty { "movies" }
+        val articles = repository.getNews(query).cachedIn(viewModelScope)
 
         updateRefresh(false)
         return articles
