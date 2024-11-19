@@ -8,4 +8,6 @@
     <string name="item_shares" formatted="false">%s shares</string>
     <string name="connection_unavailable">No connection</string>
     <string name="connection_available">Back online</string>
+    <string name="refresh">Refresh</string>
+    <string name="loading">Loading…</string>
 </resources>
