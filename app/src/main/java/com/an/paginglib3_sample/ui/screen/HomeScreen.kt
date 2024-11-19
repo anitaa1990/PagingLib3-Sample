@@ -14,17 +14,16 @@ import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.ui.component.BookPager
-import com.an.paginglib3_sample.ui.component.ErrorScreen
 import com.an.paginglib3_sample.ui.component.BookPagerOrientation
+import com.an.paginglib3_sample.ui.component.ErrorScreen
 import com.an.paginglib3_sample.ui.component.LoadingItem
 import com.an.paginglib3_sample.ui.component.NewsItem
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
-import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
 @Composable
 fun HomeScreen(
-    viewModel: NewsViewModel,
-    items: LazyPagingItems<Article>
+    items: LazyPagingItems<Article>,
+    onShareButtonClicked: (url: String) -> Unit
 ) {
     PagingLib3SampleTheme {
         Box(
@@ -57,7 +56,8 @@ fun HomeScreen(
                             items[page]?.let {
                                 NewsItem(
                                     modifier = Modifier.align(Alignment.Center),
-                                    article = it
+                                    article = it,
+                                    onShareButtonClicked = onShareButtonClicked
                                 )
                             }
                         }

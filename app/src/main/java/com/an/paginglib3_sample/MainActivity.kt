@@ -4,10 +4,12 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.screen.HomeScreen
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
+import com.an.paginglib3_sample.util.share
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -18,10 +20,11 @@ class MainActivity : ComponentActivity() {
         setContent {
             val viewModel: NewsViewModel = hiltViewModel()
             val lazyNewsItems = viewModel.getNews().collectAsLazyPagingItems()
+            val context = LocalContext.current
 
             HomeScreen(
-                viewModel = viewModel,
-                items = lazyNewsItems
+                items = lazyNewsItems,
+                onShareButtonClicked = { context.share(it) }
             )
         }
     }

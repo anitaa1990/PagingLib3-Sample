@@ -37,7 +37,8 @@ import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 @Composable
 fun NewsItem(
     modifier: Modifier = Modifier,
-    article: Article
+    article: Article,
+    onShareButtonClicked: (url: String) -> Unit
 ) {
     Column(
         modifier = modifier
@@ -69,7 +70,7 @@ fun NewsItem(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 FilledIconButton(
-                    onClick = { },
+                    onClick = { onShareButtonClicked(article.url) },
                     modifier = Modifier.size(48.dp),
                     colors = IconButtonColors(
                         contentColor = MaterialTheme.colorScheme.onBackground,
@@ -133,6 +134,6 @@ private fun NewsItemPreview() {
             publishedAt = "2024-05-21T13:00:00Z",
             content = "The company’s app redesign fumble threatens to steal the thunder from what otherwise looks (and feels) like a strong debut in a new category. There’s so much riding on the new \$450 Sonos Ace headphone…",
         )
-        NewsItem(article = article)
+        NewsItem(article = article, onShareButtonClicked = {  })
     }
 }
