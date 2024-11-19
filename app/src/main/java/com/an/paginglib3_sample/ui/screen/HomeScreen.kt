@@ -23,6 +23,7 @@ import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 @Composable
 fun HomeScreen(
     items: LazyPagingItems<Article>,
+    onItemClicked: (url: String) -> Unit,
     onShareButtonClicked: (url: String) -> Unit
 ) {
     PagingLib3SampleTheme {
@@ -57,6 +58,7 @@ fun HomeScreen(
                                 NewsItem(
                                     modifier = Modifier.align(Alignment.Center),
                                     article = it,
+                                    onItemClicked = onItemClicked,
                                     onShareButtonClicked = onShareButtonClicked
                                 )
                             }

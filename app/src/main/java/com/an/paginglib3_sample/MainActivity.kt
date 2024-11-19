@@ -9,6 +9,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.screen.HomeScreen
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
+import com.an.paginglib3_sample.util.openUrl
 import com.an.paginglib3_sample.util.share
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +25,7 @@ class MainActivity : ComponentActivity() {
 
             HomeScreen(
                 items = lazyNewsItems,
+                onItemClicked = { context.openUrl(it) },
                 onShareButtonClicked = { context.share(it) }
             )
         }

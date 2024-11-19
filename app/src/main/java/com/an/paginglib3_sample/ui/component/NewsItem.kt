@@ -2,6 +2,7 @@ package com.an.paginglib3_sample.ui.component
 
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,12 +39,14 @@ import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 fun NewsItem(
     modifier: Modifier = Modifier,
     article: Article,
+    onItemClicked: (url: String) -> Unit,
     onShareButtonClicked: (url: String) -> Unit
 ) {
     Column(
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
-            .widthIn(max = 480.dp),
+            .widthIn(max = 480.dp)
+            .clickable { onItemClicked(article.url) },
     ) {
         Box(
             modifier = Modifier
@@ -134,6 +137,6 @@ private fun NewsItemPreview() {
             publishedAt = "2024-05-21T13:00:00Z",
             content = "The company’s app redesign fumble threatens to steal the thunder from what otherwise looks (and feels) like a strong debut in a new category. There’s so much riding on the new \$450 Sonos Ace headphone…",
         )
-        NewsItem(article = article, onShareButtonClicked = {  })
+        NewsItem(article = article, onShareButtonClicked = {  }, onItemClicked = { })
     }
 }
