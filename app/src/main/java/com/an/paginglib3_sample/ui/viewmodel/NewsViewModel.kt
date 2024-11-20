@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import androidx.paging.filter
 import com.an.paginglib3_sample.data.NewsDataSource
 import com.an.paginglib3_sample.data.NewsRepository
 import com.an.paginglib3_sample.data.NewsRepository.Companion.PAGE_SIZE
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -43,5 +45,10 @@ class NewsViewModel @Inject constructor(
                 }
             ).flow
                 .cachedIn(viewModelScope)
+                .map { pagingData ->
+                    // some articles come with removed content so adding this line
+                    // to remove those articles from the list
+                    pagingData.filter { it.title != "[Removed]" }
+                }
         }
 }
