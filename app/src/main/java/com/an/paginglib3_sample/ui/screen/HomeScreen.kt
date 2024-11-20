@@ -11,40 +11,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import com.an.paginglib3_sample.model.Article
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.component.BookPager
 import com.an.paginglib3_sample.ui.component.BookPagerOrientation
 import com.an.paginglib3_sample.ui.component.ErrorScreen
 import com.an.paginglib3_sample.ui.component.LoadingItem
 import com.an.paginglib3_sample.ui.component.NewsItem
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
+import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
 @Composable
 fun HomeScreen(
-    items: LazyPagingItems<Article>,
+    viewModel: NewsViewModel,
     onItemClicked: (url: String) -> Unit,
     onShareButtonClicked: (url: String) -> Unit
 ) {
+    val news = viewModel.news.collectAsLazyPagingItems()
+
     PagingLib3SampleTheme {
         Box(
             modifier = Modifier.fillMaxSize()
         ) {
             // Different load states – Loading, Empty State, Pager list state
-            val loadState = items.loadState.mediator
-            when (loadState?.refresh) {
+            val loadState = news.loadState
+            when (loadState.refresh) {
                 is LoadState.Loading -> {
                     LoadingItem()
                 }
                 is LoadState.Error -> {
                     val error = (loadState.refresh as LoadState.Error).error
                     ErrorScreen(errorMessage = error.message ?: error.toString()) {
-                        items.refresh()
+                        news.refresh()
                     }
                 }
                 else -> {
                     // News List
-                    val pagerState = rememberPagerState { items.itemCount }
+                    val pagerState = rememberPagerState { news.itemCount }
                     BookPager(
                         state = pagerState,
                         modifier = Modifier.fillMaxWidth(),
@@ -54,7 +56,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .clip(RoundedCornerShape(16.dp)),
                         ) {
-                            items[page]?.let {
+                            news[page]?.let {
                                 NewsItem(
                                     modifier = Modifier.align(Alignment.Center),
                                     article = it,

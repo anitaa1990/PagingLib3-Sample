@@ -1,7 +1,6 @@
 package com.an.paginglib3_sample.api
 
 import com.an.paginglib3_sample.model.NewsApiResponse
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -18,5 +17,5 @@ interface NewsApiService {
         @Query("apiKey") apiKey: String,
         @Query("page") page: Long,
         @Query("pageSize") pageSize: Int
-    ): Response<NewsApiResponse>
+    ): NewsApiResponse
 }
