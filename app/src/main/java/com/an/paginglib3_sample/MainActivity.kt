@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.screen.HomeScreen
 import com.an.paginglib3_sample.ui.theme.PagingLib3SampleTheme
 import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
@@ -23,11 +22,10 @@ class MainActivity : ComponentActivity() {
 
             PagingLib3SampleTheme {
                 val viewModel: NewsViewModel = hiltViewModel()
-                val news = viewModel.news.collectAsLazyPagingItems()
                 val context = LocalContext.current
 
                 HomeScreen(
-                    news = news,
+                    viewModel = viewModel,
                     onItemClicked = { context.openUrl(it) },
                     onShareButtonClicked = { context.share(it) }
                 )

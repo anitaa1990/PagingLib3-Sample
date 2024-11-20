@@ -1,40 +1,39 @@
 package com.an.paginglib3_sample.ui.screen
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.paging.LoadState
-import androidx.paging.compose.LazyPagingItems
-import com.an.paginglib3_sample.model.Article
+
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.an.paginglib3_sample.ui.component.BookPager
 import com.an.paginglib3_sample.ui.component.BookPagerOrientation
 import com.an.paginglib3_sample.ui.component.ErrorScreen
 import com.an.paginglib3_sample.ui.component.LoadingItem
 import com.an.paginglib3_sample.ui.component.NewsItem
+import com.an.paginglib3_sample.ui.component.SearchMenu
+import com.an.paginglib3_sample.ui.component.SearchWidgetState
+import com.an.paginglib3_sample.ui.viewmodel.NewsViewModel
 
 @Composable
 fun HomeScreen(
-    news: LazyPagingItems<Article>,
+    viewModel: NewsViewModel,
     onItemClicked: (url: String) -> Unit,
     onShareButtonClicked: (url: String) -> Unit
 ) {
+    val news = viewModel.news.collectAsLazyPagingItems()
+    val inputText = viewModel.inputText.collectAsState()
+    val searchWidgetState by viewModel.searchWidgetState
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -74,22 +73,19 @@ fun HomeScreen(
                 }
 
                 // Search menu
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 55.dp, horizontal = 20.dp),
-                    horizontalArrangement = Arrangement.End
-                ) {
-                    Spacer(Modifier.weight(1f))
-                    IconButton(onClick = {  }) {
-                        Icon(
-                            modifier = Modifier.size(30.dp),
-                            imageVector = Icons.Default.Search,
-                            contentDescription = "",
-                            tint = MaterialTheme.colorScheme.onSurface
-                        )
+                SearchMenu(
+                    inputText = inputText.value,
+                    searchWidgetState = searchWidgetState,
+                    onTextChange = { viewModel.updateSearchInput(it) },
+                    onCloseClicked = {
+                        viewModel.onSearchClosed()
+                        news.refresh()
+                    },
+                    onSearchClicked = { news.refresh() },
+                    onSearchIconClicked = {
+                        viewModel.updateSearchWidgetState(SearchWidgetState.OPENED)
                     }
-                }
+                )
             }
         }
     }

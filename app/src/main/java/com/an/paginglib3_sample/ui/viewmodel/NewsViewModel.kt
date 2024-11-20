@@ -1,5 +1,8 @@
 package com.an.paginglib3_sample.ui.viewmodel
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.State
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
@@ -10,6 +13,7 @@ import com.an.paginglib3_sample.data.NewsDataSource
 import com.an.paginglib3_sample.data.NewsRepository
 import com.an.paginglib3_sample.data.NewsRepository.Companion.PAGE_SIZE
 import com.an.paginglib3_sample.data.NewsRepository.Companion.PREFETCH_DISTANCE
+import com.an.paginglib3_sample.ui.component.SearchWidgetState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -26,6 +30,9 @@ import kotlin.time.Duration.Companion.milliseconds
 class NewsViewModel @Inject constructor(
     private val repository: NewsRepository
 ) : ViewModel() {
+    private val _searchWidgetState: MutableState<SearchWidgetState> = mutableStateOf(SearchWidgetState.CLOSED)
+    val searchWidgetState: State<SearchWidgetState> = _searchWidgetState
+
     private val _inputText: MutableStateFlow<String> = MutableStateFlow("movies")
     val inputText: StateFlow<String> = _inputText
 
@@ -51,4 +58,17 @@ class NewsViewModel @Inject constructor(
                     pagingData.filter { it.title != "[Removed]" }
                 }
         }
+
+    fun updateSearchWidgetState(newValue: SearchWidgetState) {
+        _searchWidgetState.value = newValue
+    }
+
+    fun updateSearchInput(newValue: String) {
+        _inputText.value = newValue
+    }
+
+    fun onSearchClosed() {
+        updateSearchInput("movies")
+        updateSearchWidgetState(SearchWidgetState.CLOSED)
+    }
 }
