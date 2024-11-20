@@ -9,7 +9,6 @@ import okhttp3.mockwebserver.MockWebServer
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
 import org.junit.Before
 import org.junit.Test
 import retrofit2.Retrofit
@@ -59,9 +58,9 @@ class NewsApiServiceTest: BaseUnitTest() {
         )
 
         // Assert
-        assertEquals(200, actualResponse.code())
-        assertEquals("ok", actualResponse.body()?.status)
-        assertEquals(20, actualResponse.body()?.articles?.size)
+        assertEquals(769, actualResponse.totalResults)
+        assertEquals("ok", actualResponse.status)
+        assertEquals(20, actualResponse.articles.size)
     }
 
     @Test
@@ -82,10 +81,9 @@ class NewsApiServiceTest: BaseUnitTest() {
         )
 
         // Assert
-        assertEquals(200, actualResponse.code())
-        assertEquals("ok", actualResponse.body()?.status)
-        assertEquals(0, actualResponse.body()?.articles?.size)
-        assertEquals(0L, actualResponse.body()?.totalResults)
+        assertEquals("ok", actualResponse.status)
+        assertEquals(0, actualResponse.articles.size)
+        assertEquals(0L, actualResponse.totalResults)
     }
 
     @Test
@@ -98,17 +96,12 @@ class NewsApiServiceTest: BaseUnitTest() {
         mockWebServer.enqueue(response)
 
         // Act
-        val  actualResponse = apiService.fetchFeed(
-            "movies",
-            BuildConfig.api_key,
-            1,
-            20
-        )
-        println(response.toString())
+        val exception = try {
+            apiService.fetchFeed("movies", BuildConfig.api_key, 1, 20)
+            null
+        } catch (e: Exception) { e }
 
         // Assert
-        assertEquals(400, actualResponse.code())
-        assertNull(actualResponse.body())
-        assertNotNull(actualResponse.errorBody())
+        assertNotNull(exception)
     }
 }

@@ -2,8 +2,6 @@ package com.an.paginglib3_sample.data
 
 import androidx.paging.PagingSource
 import com.an.paginglib3_sample.BaseUnitTest
-import com.an.paginglib3_sample.BuildConfig
-import com.an.paginglib3_sample.api.NewsApiService
 import com.an.paginglib3_sample.model.Article
 import com.an.paginglib3_sample.model.NewsApiResponse
 import com.an.paginglib3_sample.model.Source
@@ -12,15 +10,14 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
-import retrofit2.Response
 
 class NewsDataSourceTest: BaseUnitTest() {
-    private val apiService: NewsApiService = mock()
+    private val repository: NewsRepository = mock()
     private val query = "movies"
     private val pageSize = 20
     private val firstPage = 1L
 
-    private val dataSource = NewsDataSource(apiService, query)
+    private val dataSource = NewsDataSource(repository, query)
 
     private val expectedArticles = listOf(
         Article(
@@ -119,14 +116,12 @@ class NewsDataSourceTest: BaseUnitTest() {
 
     private suspend fun setupMockResponse(page: Long) {
         `when`(
-            apiService.fetchFeed(query, BuildConfig.api_key, page, 20)
+            repository.fetchNews(query, page)
         ).thenReturn(
-            Response.success(
-                NewsApiResponse(
-                    status = "ok",
-                    totalResults = 3,
-                    articles = expectedArticles
-                )
+            NewsApiResponse(
+                status = "ok",
+                totalResults = 3,
+                articles = expectedArticles
             )
         )
     }
