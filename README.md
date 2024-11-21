@@ -1,5 +1,5 @@
 # PagingLib3-Compose
-A simple demo project for demonstrating the <b>Paging3 library</b> with <b>Jetpack Compose</b>. More details on how to implement Paging3 library with Jetpack Compose can be found [here]([url](https://devanddroid.com/2024/11/20/5-steps-to-use-paging3-library-with-jetpack-compose/)).
+A simple demo project for demonstrating the <b>Paging3 library</b> with <b>Jetpack Compose</b>. More details on how to implement Paging3 library with Jetpack Compose can be found [here](https://devanddroid.com/2024/11/20/5-steps-to-use-paging3-library-with-jetpack-compose/).
 
 <img src="https://github.com/anitaa1990/PagingLib3-Sample/blob/main/media/1.png" width="200" style="max-width:100%;"><img src="https://github.com/anitaa1990/PagingLib3-Sample/blob/main/media/2.png" width="200" style="max-width:100%;"> <img src="https://github.com/anitaa1990/PagingLib3-Sample/blob/main/media/3.png" width="200" style="max-width:100%;"><img src="https://github.com/anitaa1990/PagingLib3-Sample/blob/main/media/4.png" width="200" style="max-width:100%;"><img src="https://github.com/anitaa1990/PagingLib3-Sample/blob/main/media/5.png" width="200" style="max-width:100%;"></br></br>
 
